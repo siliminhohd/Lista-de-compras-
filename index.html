@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Minha Lista de Compras</title>
+<style>
+:root{--bg:#0f1012;--sf:#1d1f23;--sf2:#2a2d33;--tx:#f3f1ee;--mu:#a9a7a3;--rd:#ff8a3d;--ok:#3ea66b}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--tx);font:15px/1.4 Roboto,"Segoe UI",system-ui,Arial,sans-serif;padding-bottom:84px}
+button,input{font:inherit;color:inherit}
+input{background:var(--bg);border:1px solid #3a3a3a;border-radius:10px;padding:11px 14px;width:100%;outline:none}
+input:focus{border-color:#6aa9ff}
+button{cursor:pointer;border:0}
+.btn{background:var(--rd);color:#fff;border-radius:22px;padding:11px 20px;font-weight:600}
+.btn.gh{background:var(--sf2)}
+.ib{background:none;font-size:20px;width:40px;height:40px;border-radius:50%}
+.ib:hover{background:var(--sf2)}
+header{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top,0px))}
+.lg{display:flex;align-items:center;gap:6px;font-weight:700;font-size:19px;letter-spacing:-.5px}
+.lg i{width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,#ffb36b,#ff6a3d);display:grid;place-items:center;font-style:normal;font-size:16px}
+.av{width:36px;height:36px;border-radius:50%;background:var(--sf2);padding:0;overflow:hidden}.av span{font-size:19px;font-weight:700}.av img,.pv img{width:100%;height:100%;object-fit:cover}.pv{width:88px;height:88px;border-radius:50%;background:var(--sf2);margin:0 auto;display:grid;place-items:center;font-size:46px;overflow:hidden}.emo{display:flex;flex-wrap:wrap;justify-content:center}
+.chips{display:flex;gap:8px;padding:6px 14px 12px;overflow-x:auto}
+.chip{background:var(--sf);border-radius:8px;padding:7px 13px;white-space:nowrap;font-weight:500}
+.chip.on{background:var(--tx);color:#0f0f0f}
+.sec{padding:8px 14px 2px;font-size:17px;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px 14px;padding:10px 14px}
+.card{cursor:pointer}
+.th{position:relative;aspect-ratio:16/9;border-radius:12px;background:var(--sf);display:grid;grid-template-columns:1fr 1fr;place-items:center;font-size:34px;overflow:hidden}
+.th.plus{display:flex;justify-content:center;align-items:center;font-size:52px;color:var(--rd);background:#2a1115}
+.th .bar{position:absolute;left:0;bottom:0;height:4px;background:var(--rd)}
+.th .bd{position:absolute;right:6px;bottom:8px;background:rgba(0,0,0,.8);border-radius:4px;padding:1px 6px;font-size:12px;font-weight:600}
+.meta{display:flex;gap:10px;padding-top:9px}
+.meta .t{flex:1;min-width:0}
+.meta b{display:block;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.meta span{color:var(--mu);font-size:13px}
+.empty{color:var(--mu);padding:30px 18px;text-align:center}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--bg);border-top:1px solid #272727;display:flex;justify-content:space-around;align-items:center;padding:6px 0 calc(8px + env(safe-area-inset-bottom,0px))}
+nav button{background:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--mu);min-width:90px}
+nav button span{font-size:23px;line-height:1}
+nav button.on{color:var(--tx)}
+nav .pl{font-size:34px;border:2px solid var(--tx);border-radius:50%;width:44px;height:44px;display:grid;place-items:center;color:var(--tx);background:none}
+.ed{max-width:640px;margin:0 auto;padding:0 14px 20px}
+.edtop{display:flex;align-items:center;gap:6px;padding:10px 0}
+.title{font-size:19px;font-weight:700;background:none;border:0;border-bottom:1px solid #333;border-radius:0;padding:6px 2px}
+.add{display:flex;gap:8px;margin:8px 0 12px}
+.add #nq{width:70px;text-align:center}
+.prog{height:6px;background:var(--sf2);border-radius:3px;overflow:hidden;margin-top:4px}
+.prog i{display:block;height:100%;background:var(--ok);transition:width .25s}
+.ed small{color:var(--mu);display:block;margin:6px 0 8px}
+ul{list-style:none;padding:0}
+li{display:flex;align-items:center;gap:8px;background:var(--sf);border-radius:12px;padding:8px 8px 8px 12px;margin-bottom:8px}
+li label{flex:1;display:flex;align-items:center;gap:10px;min-width:0;cursor:pointer}
+li input[type=checkbox]{width:22px;height:22px;accent-color:var(--ok);flex:none}
+li .nm{overflow:hidden;text-overflow:ellipsis}
+li.dn .nm{text-decoration:line-through;color:var(--mu)}
+li.dn .em{opacity:.4}
+li .q{width:62px;text-align:center;padding:7px 4px}
+.fin{width:100%;margin-top:10px;padding:14px;font-size:16px;background:var(--ok)}
+.login{max-width:340px;margin:0 auto;padding:11vh 22px;display:flex;flex-direction:column;gap:12px;text-align:center}
+.login .big{font-size:56px}
+.login h1{font-size:26px;letter-spacing:-.5px}
+.login p{color:var(--mu)}
+.login a{color:#6aa9ff;font-size:13px;cursor:pointer}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.65);display:flex;align-items:flex-end;justify-content:center;z-index:20}
+.mb{background:var(--sf);width:100%;max-width:480px;border-radius:18px 18px 0 0;padding:20px;max-height:85vh;overflow:auto;display:flex;flex-direction:column;gap:10px;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+@media(min-width:600px){.ov{align-items:center}.mb{border-radius:18px}}
+.mb h3{font-size:18px}
+.opt{background:var(--sf2);border-radius:12px;padding:14px;text-align:left;font-size:15px}
+.opt small{display:block;color:var(--mu)}
+.row{display:flex;gap:8px;justify-content:flex-end}
+.mb ul li{background:var(--sf2);padding:8px 12px;margin:0}
+.mb ul{display:flex;flex-direction:column;gap:6px}
+.sum{background:linear-gradient(135deg,#3a1219,#1d1d1d);border-radius:14px;padding:16px;margin:4px 14px 6px}
+.sum b{font-size:26px;display:block}
+.sum span{color:var(--mu);font-size:13px}
+#toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#f1f1f1;color:#111;padding:10px 16px;border-radius:10px;z-index:30;font-weight:500;display:none;max-width:90%;text-align:center}
+.btn{color:#1d1006}.btn.gh{color:var(--tx)}.fin{color:#06140c}
+.chip.on{background:var(--rd);color:#1d1006}.th{border-radius:18px}.th.plus{background:#2b1a10}.th .bd{background:var(--rd);color:#1d1006}
+.sum{background:linear-gradient(135deg,#40240f,#1d1f23)}nav button.on span{background:rgba(255,138,61,.2);border-radius:14px;padding:2px 14px}
+.ttl{flex:1;font-size:19px;padding:0 2px}.qt{color:var(--mu);padding-right:8px}
+:focus-visible{outline:2px solid #6aa9ff;outline-offset:2px}
+</style>
+</head>
+<body>
+<div id="app"></div><div id="modal"></div><div id="toast"></div>
+<script>
+const $=s=>document.querySelector(s),K='lc_v1',MAX=22;
+const load=()=>{try{return JSON.parse(localStorage.getItem(K))||{user:null,lists:[]}}catch(e){return{user:null,lists:[]}}};
+let S=load(),view='login',tab='home',flt='Tudo',cur=null;
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){toast('Não foi possível salvar neste navegador')}};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const brl=n=>Number(n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const dt=t=>new Date(t).toLocaleDateString('pt-BR');
+const hs=s=>btoa(unescape(encodeURIComponent(s)));
+const drafts=()=>S.lists.filter(l=>!l.done),hist=()=>S.lists.filter(l=>l.done).sort((a,b)=>b.finished-a.finished);
+const EM=[['leite','🥛'],['pão','🍞'],['pao','🍞'],['arroz','🍚'],['feij','🫘'],['carne','🥩'],['frango','🍗'],['ovo','🥚'],['banana','🍌'],['maçã','🍎'],['maca','🍎'],['fruta','🍉'],['tomate','🍅'],['alface','🥬'],['batata','🥔'],['cebola','🧅'],['café','☕'],['cafe','☕'],['cerveja','🍺'],['vinho','🍷'],['refri','🥤'],['suco','🧃'],['água','💧'],['agua','💧'],['queijo','🧀'],['macarr','🍝'],['sabão','🧼'],['sabao','🧼'],['detergente','🧴'],['papel','🧻'],['shampoo','🧴'],['chocolate','🍫'],['biscoito','🍪'],['peixe','🐟'],['açúcar','🍬'],['acucar','🍬'],['óleo','🫒'],['oleo','🫒'],['manteiga','🧈'],['sorvete','🍨']];
+const emo=n=>{n=n.toLowerCase();for(const[k,v]of EM)if(n.includes(k))return v;return'🛒'};
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display='none',2600)}
+function modal(h){$('#modal').innerHTML=`<div class="ov" onclick="if(event.target===this)closeM()"><div class="mb">${h}</div></div>`}
+function closeM(){$('#modal').innerHTML=''}
+
+let tmpAv={t:'e',v:'🍕'};
+const AVS=['🍕','🥑','🍓','🍩','🌮','🐱','🐶','🦊'];
+const uav=()=>S.user.av||{t:'e',v:S.user.name[0].toUpperCase()};
+const avh=a=>a.t==='img'?`<img src="${a.v}" alt="">`:`<span>${a.v}</span>`;
+const bg=id=>{let h=0;for(const c of id)h=(h*31+c.charCodeAt(0))%360;return`linear-gradient(135deg,hsl(${h} 38% 24%),hsl(${(h+40)%360} 35% 14%))`};
+function picker(){return `<div class="pv" id="pv">${avh(tmpAv)}</div><div class="emo">${AVS.map(e=>`<button type="button" class="ib" onclick="tmpAv={t:'e',v:'${e}'};$('#pv').innerHTML=avh(tmpAv)">${e}</button>`).join("")}<button type="button" class="ib" title="Enviar foto" onclick="$('#pf').click()">📷</button></div><input id="pf" type="file" accept="image/*" hidden onchange="pickImg(this)">`}
+function pickImg(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),m=Math.min(im.width,im.height);c.width=c.height=128;c.getContext('2d').drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,128,128);tmpAv={t:'img',v:c.toDataURL('image/jpeg',.82)};$('#pv').innerHTML=avh(tmpAv)};im.src=r.result};r.readAsDataURL(f)}
+function chAv(){tmpAv=uav();modal(`<h3>Foto de perfil</h3>${picker()}<div class="row"><button class="btn gh" onclick="closeM()">Cancelar</button><button class="btn" onclick="S.user.av=tmpAv;save();closeM();render()">Salvar</button></div>`)}
+/* ---------- Login ---------- */
+function login(){const u=S.user;
+$('#app').innerHTML=`<div class="login">${u?`<div class="pv">${avh(uav())}</div>`:""}<h1>Lista de Compras</h1>`+(u
+?`<p>Olá, <b>${esc(u.name)}</b>!</p>${u.pass?'<input id="p" type="password" placeholder="Senha" onkeydown="if(event.key===\'Enter\')enter()">':''}<button class="btn" onclick="enter()">Entrar</button><a onclick="resetAll()">Não sou eu / apagar tudo</a>`
+:`<p>Crie seu perfil. Tudo fica salvo neste navegador.</p>${picker()}<input id="n" placeholder="Seu nome"><input id="p" type="password" placeholder="Senha (opcional)"><button class="btn" onclick="enter()">Começar</button>`)+`</div>`}
+function enter(){
+if(!S.user){const n=$('#n').value.trim();if(!n)return toast('Digite seu nome');const p=$('#p').value;S.user={name:n,pass:p?hs(p):'',av:tmpAv};save()}
+else if(S.user.pass&&hs($('#p').value)!==S.user.pass)return toast('Senha incorreta');
+view='home';tab='home';render()}
+function resetAll(){modal(`<h3>Apagar tudo?</h3><p>Isso remove seu perfil, rascunhos e histórico deste navegador.</p><div class="row"><button class="btn gh" onclick="closeM()">Cancelar</button><button class="btn" onclick="S={user:null,lists:[]};save();closeM();view='login';render()">Apagar</button></div>`)}
+
+/* ---------- Home ---------- */
+function thumb(l){const e=[...new Set(l.items.map(i=>emo(i.name)))].slice(0,4);while(e.length<4)e.push('');return e.map(x=>`<span>${x}</span>`).join('')}
+function card(l){const n=l.items.length,d=l.items.filter(i=>i.done).length;
+return `<div class="card" onclick="${l.done?`hd('${l.id}')`:`openL('${l.id}')`}"><div class="th" style="background:${bg(l.id)}">${thumb(l)}${l.done?'':`<div class="bar" style="width:${n?d/n*100:0}%"></div>`}<div class="bd">${l.done?brl(l.total):d+'/'+n}</div></div>
+<div class="meta"><div class="t"><b>${esc(l.name)}</b><span>${l.done?'Concluída em '+dt(l.finished)+' • '+n+' itens':(l.mode==='shop'?'Fazendo a compra':'Montando a lista')+' • '+n+' itens'}</span></div>${l.done?'':`<button class="ib" onclick="event.stopPropagation();delL('${l.id}')" aria-label="Excluir">⋮</button>`}</div></div>`}
+function home(){const d=drafts(),h=hist().slice(0,6);
+let cs=flt==='Rascunhos'?d:flt==='Recentes'?h:[...d,...h];
+return `<div class="chips">${['Tudo','Rascunhos','Recentes'].map(c=>`<button class="chip ${c===flt?'on':''}" onclick="flt='${c}';render()">${c}</button>`).join('')}</div>
+<div class="grid"><div class="card" onclick="newP()"><div class="th plus">＋</div><div class="meta"><div class="t"><b>Nova compra</b><span>${d.length}/${MAX} listas em aberto</span></div></div></div>${cs.map(card).join('')}</div>
+${cs.length?'':'<p class="empty">Nada por aqui ainda. Toque em Nova compra para começar.</p>'}`}
+
+/* ---------- Nova compra ---------- */
+function newP(){modal(`<h3>Nova compra</h3><button class="opt" onclick="mk()">📝 Lista em branco<small>Comece do zero</small></button><button class="opt" onclick="oldL()">🕘 Usar lista antiga<small>Copia os itens de uma compra anterior</small></button>`)}
+function oldL(){const h=hist();modal(`<h3>Escolha uma lista antiga</h3>${h.length?h.map(l=>`<button class="opt" onclick="mk('${l.id}')">${esc(l.name)}<small>${dt(l.finished)} • ${l.items.length} itens • ${brl(l.total)}</small></button>`).join(''):'<p class="empty">Você ainda não finalizou nenhuma compra.</p>'}<div class="row"><button class="btn gh" onclick="newP()">Voltar</button></div>`)}
+function mk(src){if(drafts().length>=MAX){closeM();return toast('Limite de '+MAX+' listas em aberto. Finalize ou exclua uma.')}
+const o=src&&S.lists.find(x=>x.id===src);
+const l={id:uid(),name:'Compra de '+dt(Date.now()),items:o?o.items.map(i=>({...i,id:uid(),done:false})):[],done:false,mode:'build',created:Date.now()};
+S.lists.unshift(l);save();cur=l;view='edit';closeM();render()}
+function openL(id){cur=S.lists.find(l=>l.id===id);view='edit';render()}
+function delL(id){modal(`<h3>Excluir rascunho?</h3><div class="row"><button class="btn gh" onclick="closeM()">Cancelar</button><button class="btn" onclick="S.lists=S.lists.filter(l=>l.id!=='${id}');save();closeM();render()">Excluir</button></div>`)}
+
+/* ---------- Editor ---------- */
+function editor(){const l=cur,n=l.items.length,d=l.items.filter(i=>i.done).length;
+const its=[...l.items].sort((a,b)=>a.done-b.done);
+const sug=[...new Set(S.lists.flatMap(x=>x.items.map(i=>i.name)))].map(s=>`<option value="${esc(s)}">`).join('');
+return `<div class="ed"><div class="edtop"><button class="ib" onclick="back()" aria-label="Voltar">←</button><input class="title" value="${esc(l.name)}" onchange="cur.name=this.value.trim()||'Sem nome';save()"><button class="ib" onclick="shareL()" aria-label="Compartilhar">📤</button></div>
+<div class="add"><input id="ni" list="sug" placeholder="Adicionar item..." autocomplete="off" onkeydown="if(event.key==='Enter')addI()"><input id="nq" type="number" min="1" value="1" aria-label="Quantidade"><button class="btn" onclick="addI()">＋</button></div><datalist id="sug">${sug}</datalist>
+<small>${n} ${n===1?"item":"itens"} na lista • salvo automaticamente</small>
+<ul>${its.map(i=>`<li><label><span class="em">${emo(i.name)}</span><span class="nm">${esc(i.name)}</span></label><input class="q" type="number" min="1" value="${i.qty}" onchange="sq('${i.id}',this.value)" aria-label="Quantidade"><button class="ib" onclick="rm('${i.id}')" aria-label="Remover">✕</button></li>`).join('')}</ul>
+${n?'':'<p class="empty">Lista vazia. Digite um item acima e toque em ＋.</p>'}
+<button class="btn fin" onclick="goShop()">Criar lista de compras</button></div>`}
+function shopper(){const l=cur,n=l.items.length,d=l.items.filter(i=>i.done).length,its=[...l.items].sort((a,b)=>a.done-b.done);
+return `<div class="ed"><div class="edtop"><button class="ib" onclick="back()" aria-label="Voltar">←</button><h2 class="ttl">${esc(l.name)}</h2><button class="ib" onclick="shareL()" aria-label="Compartilhar">📤</button></div>
+<div class="prog"><i style="width:${n?d/n*100:0}%"></i></div><small>${d} de ${n} no carrinho</small>
+<ul>${its.map(i=>`<li class="${i.done?'dn':''}"><label><input type="checkbox" ${i.done?'checked':''} onchange="tg('${i.id}')"><span class="em">${emo(i.name)}</span><span class="nm">${esc(i.name)}</span></label><span class="qt">${i.qty}x</span></li>`).join("")}</ul>
+<button class="btn gh fin" onclick="goEdit()">✏️ Editar lista</button><button class="btn fin" onclick="fin()">Finalizar compra</button></div>`}
+function goShop(){if(!cur.items.length)return toast('Adicione ao menos um item');cur.mode='shop';save();render();scrollTo(0,0)}
+function goEdit(){cur.mode='build';save();render();scrollTo(0,0)}
+function addI(){const i=$('#ni'),n=i.value.trim();if(!n)return;cur.items.push({id:uid(),name:n,qty:Math.max(1,parseInt($('#nq').value)||1),done:false});save();render();$('#ni').focus()}
+const tg=id=>{const i=cur.items.find(x=>x.id===id);i.done=!i.done;save();render()};
+const rm=id=>{cur.items=cur.items.filter(x=>x.id!==id);save();render()};
+const sq=(id,v)=>{cur.items.find(x=>x.id===id).qty=Math.max(1,parseInt(v)||1);save()};
+const back=()=>{cur=null;view='home';tab='home';render()};
+function shareL(){const t=cur.name+'\n'+cur.items.map(i=>(i.done?'✅ ':'⬜ ')+i.qty+'x '+i.name).join('\n');
+if(navigator.share)navigator.share({text:t}).catch(()=>{});else window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank')}
+function fin(){if(!cur.items.length)return toast('Adicione ao menos um item');const f=cur.items.filter(i=>!i.done).length;
+modal(`<h3>Finalizar compra</h3>${f?`<p style="color:var(--mu)">Ainda ${f===1?'falta 1 item':'faltam '+f+' itens'} sem marcar.</p>`:''}<p>Qual foi o valor total da compra?</p><input id="vl" inputmode="decimal" placeholder="Ex.: 187,90" onkeydown="if(event.key==='Enter')done()"><div class="row"><button class="btn gh" onclick="closeM()">Cancelar</button><button class="btn" onclick="done()">Finalizar</button></div>`);setTimeout(()=>$('#vl').focus(),50)}
+function done(){let v=$('#vl').value.trim();if(v.includes(','))v=v.replace(/\./g,'').replace(',','.');v=parseFloat(v);
+if(isNaN(v)||v<0)return toast('Digite um valor válido');cur.done=true;cur.total=v;cur.finished=Date.now();save();closeM();cur=null;view='home';tab='hist';render();toast('Compra salva no histórico')}
+
+/* ---------- Histórico ---------- */
+function history(){const h=hist(),m=new Date().getMonth(),y=new Date().getFullYear();
+const mm=h.filter(l=>{const d=new Date(l.finished);return d.getMonth()===m&&d.getFullYear()===y});
+const tm=mm.reduce((s,l)=>s+l.total,0);
+return `<div class="sum"><span>Gasto neste mês</span><b>${brl(tm)}</b><span>${mm.length} ${mm.length===1?'compra':'compras'} • total geral ${brl(h.reduce((s,l)=>s+l.total,0))}</span></div>
+<div class="sec">Histórico de compras</div><div class="grid">${h.map(card).join('')}</div>${h.length?'':'<p class="empty">Suas compras finalizadas aparecem aqui.</p>'}`}
+function hd(id){const l=S.lists.find(x=>x.id===id);
+modal(`<h3>${esc(l.name)}</h3><span style="color:var(--mu)">${dt(l.finished)} • ${brl(l.total)}</span><ul>${l.items.map(i=>`<li>${emo(i.name)} <span class="nm" style="flex:1">${esc(i.name)}</span><span>${i.qty}x</span></li>`).join('')}</ul>
+<div class="row"><button class="btn gh" onclick="S.lists=S.lists.filter(x=>x.id!=='${id}');save();closeM();render()">Excluir</button><button class="btn" onclick="mk('${id}')">Usar de novo</button></div>`)}
+
+/* ---------- Perfil e render ---------- */
+function prof(){modal(`<h3>${esc(S.user.name)}</h3><button class="opt" onclick="chAv()">🙂 Trocar foto de perfil</button><button class="opt" onclick="expB()">💾 Salvar backup<small>Baixa um arquivo com suas listas e histórico</small></button><button class="opt" onclick="$('#bf').click()">📂 Restaurar backup<small>Útil para levar tudo para outro celular</small></button><input id="bf" type="file" accept=".json,application/json" hidden onchange="impB(this)"><button class="opt" onclick="closeM();view='login';render()">🔒 Sair</button><button class="opt" onclick="resetAll()">🗑️ Apagar todos os dados</button>`)}
+function expB(){const b=new Blob([JSON.stringify(S)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='backup-lista-de-compras-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('Backup salvo')}
+let bk=null;
+function impB(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d||!Array.isArray(d.lists))throw 0;bk=d;modal(`<h3>Restaurar backup?</h3><p>Isso troca os dados atuais por ${d.lists.length} listas do arquivo.</p><div class="row"><button class="btn gh" onclick="closeM()">Cancelar</button><button class="btn" onclick="applyB()">Restaurar</button></div>`)}catch(e){toast('Arquivo de backup inválido')}};r.readAsText(f)}
+function applyB(){S={user:bk.user||S.user,lists:bk.lists};save();closeM();view='login';render();toast('Backup restaurado')}
+function render(){
+if(view==='login'){if(S.user&&!S.user.pass&&!render.o){render.o=1;view='home'}else return login()}
+const hdr=`<header><div class="lg"><i>🛒</i>Compras</div><button class="av ib" onclick="prof()" aria-label="Perfil">${avh(uav())}</button></header>`;
+if(view==='edit'){$('#app').innerHTML=cur.mode==='shop'?shopper():editor();return}
+$('#app').innerHTML=hdr+(tab==='home'?home():history())+
+`<nav><button class="${tab==='home'?'on':''}" onclick="tab='home';render()"><span>🏠</span>Menu principal</button><button class="pl" onclick="newP()" aria-label="Nova compra">＋</button><button class="${tab==='hist'?'on':''}" onclick="tab='hist';render()"><span>🧾</span>Histórico</button></nav>`}
+render();
+</script>
+</body>
+</html>
